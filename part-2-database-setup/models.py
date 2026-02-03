@@ -1,60 +1,40 @@
-# =============================================================================
-# Part 2: Database Models
-# =============================================================================
-# Models define the structure of our database tables.
-# Each class = one table in the database.
-# =============================================================================
-
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
 
-# =============================================================================
+# ============================
 # USER MODEL
-# =============================================================================
-# This creates a 'users' table with columns:
-# id, username, email, password_hash, is_admin
-
+# ============================
 class User(db.Model):
-    __tablename__ = 'users'
-
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(256), nullable=False)
-    is_admin = db.Column(db.Boolean, default=False)
+    phone = db.Column(db.String(15))  # ✅ Activity 1
+    password_hash = db.Column(db.String(128), nullable=False)
 
-    # Relationship: One user can have many todos
-    todos = db.relationship('Todo', backref='owner', lazy=True)
+    todos = db.relationship('Todo', backref='user', lazy=True)
 
     def __repr__(self):
-        return f'<User {self.username}>'
+        return f"<User {self.username}>"
 
 
-# =============================================================================
+# ============================
 # TODO MODEL
-# =============================================================================
-# This creates a 'todos' table with columns:
-# id, task_content, is_completed, user_id
-
+# ============================
 class Todo(db.Model):
-    __tablename__ = 'todos'
-
     id = db.Column(db.Integer, primary_key=True)
     task_content = db.Column(db.String(200), nullable=False)
-    is_completed = db.Column(db.Boolean, default=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f'<Todo {self.task_content[:20]}>'
+        return f"<Todo {self.task_content}>"
 
 
-# =============================================================================
-# INITIALIZE DATABASE
-# =============================================================================
+# ============================
+# INIT DATABASE
+# ============================
 def init_db(app):
-    """Connect database to Flask app and create tables."""
     db.init_app(app)
     with app.app_context():
         db.create_all()
