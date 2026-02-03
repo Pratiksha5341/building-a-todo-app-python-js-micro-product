@@ -8,17 +8,18 @@
 #   3. How to render HTML templates
 # =============================================================================
 
+# =============================================================================
+# Part 1: Hello Flask (UPDATED with Activities)
+# =============================================================================
+
 from flask import Flask, render_template
 
 # Create the Flask application
 app = Flask(__name__)
 
-
 # =============================================================================
 # ROUTES
 # =============================================================================
-# A route connects a URL to a Python function.
-# When user visits the URL, Flask runs the function.
 
 @app.route('/')
 def home():
@@ -39,14 +40,40 @@ def contact():
 
 
 # =============================================================================
+# ACTIVITY 1: New Page - Services
+# =============================================================================
+@app.route('/services')
+def services():
+    """Services page"""
+    return render_template('services.html')
+
+
+# =============================================================================
+# ACTIVITY 3: Plain Text Response
+# =============================================================================
+@app.route('/hello-text')
+def hello_text():
+    return "Hello World! This is plain text response."
+
+
+# =============================================================================
+# ACTIVITY 4: Dynamic Route
+# =============================================================================
+@app.route('/hello/<name>')
+def hello(name):
+    return f"Hello, {name}! Welcome to Flask 🚀"
+
+
+# =============================================================================
 # RUN THE SERVER
 # =============================================================================
 if __name__ == '__main__':
     print("\n" + "="*50)
-    print("  Part 1: Hello Flask")
-    print("  Open: http://127.0.0.1:5000")
+    print("  Part 1: Hello Flask (With Activities)")
+    print("  Open: http://127.0.0.1:8080")
     print("="*50 + "\n")
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
+
 
 
 # ============================================
